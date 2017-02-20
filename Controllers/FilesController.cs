@@ -56,15 +56,15 @@ namespace servicedesk.Services.Drive.Controllers
         }
         
         [HttpPost] // Authorize
-        public async Task<IActionResult> Post(string resource, Guid referenceId, ICollection<IFormFile> files)
+        public async Task<IActionResult> Post(string resource, Guid referenceId, ICollection<IFormFile> file)
         {
-            foreach(var f in files)
+            foreach(var f in file)
             {
                 using (var memoryStream = new MemoryStream())
                 {
                     await f.CopyToAsync(memoryStream);
 
-                    var file = new Domain.File
+                    var create = new Domain.File
                     {
                         Resource = resource,
                         ReferenceId = referenceId,
@@ -75,7 +75,7 @@ namespace servicedesk.Services.Drive.Controllers
                         Content = new Domain.FileContent(memoryStream.ToArray())
                     };
                     
-                    context.Add(file);
+                    context.Add(create);
                     await context.SaveChangesAsync();
                 }
             }
