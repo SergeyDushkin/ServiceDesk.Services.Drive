@@ -2,7 +2,7 @@ FROM microsoft/dotnet:1.1.0-sdk-msbuild-rc3
 COPY . /app
 WORKDIR /app
  
-RUN ["dotnet", "restore", "--source", "https://api.nuget.org/v3/index.json", "--source", "https://www.myget.org/F/sergeydushkin/api/v3/index.json", "--no-cache"]
+RUN ["dotnet", "restore", "--source", "https://api.nuget.org/v3/index.json", "--source", "https://www.myget.org/F/sergeydushkin/api/v3/index.json", "--source", "https://www.myget.org/F/imagesharp/api/v3/index.json", "--no-cache"]
 RUN ["dotnet", "build"]
  
 EXPOSE 5000/tcp
