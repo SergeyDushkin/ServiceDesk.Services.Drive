@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using servicedesk.Services.Drive.Dal;
+using ImageSharp;
+using ImageSharp.Formats;
 
 namespace servicedesk.Services.Drive.Controllers
 {
@@ -43,7 +45,7 @@ namespace servicedesk.Services.Drive.Controllers
 
         [Route("{id}/download")]
         [HttpGet]
-        public async Task<IActionResult> Download(Guid id)
+        public async Task<IActionResult> Download(Guid id, string size)
         {
             var record = await context.Files.Include(r => r.Content).SingleOrDefaultAsync(r => r.Id == id);
 
@@ -52,7 +54,54 @@ namespace servicedesk.Services.Drive.Controllers
                 return NotFound();
             }
 
-            return File(record.Content.Content, record.ContentType, record.Name);
+            var content = record.Content.Content;
+
+            if (record.ContentType == "image/jpeg")
+            {
+                switch (size)
+                {
+                    case "XXXS":
+                        content = ResizeImage(content, 50);
+                        break;
+                    case "XXS":
+                        content = ResizeImage(content, 75);
+                        break;
+                    case "XS":
+                        content = ResizeImage(content, 100);
+                        break;
+                    case "S":
+                        content = ResizeImage(content, 150);
+                        break;
+                    case "M":
+                        content = ResizeImage(content, 300);
+                        break;
+                    case "L":
+                        content = ResizeImage(content, 500);
+                        break;
+                    case "XL":
+                        content = ResizeImage(content, 800);
+                        break;
+                }
+            }
+
+            return File(content, record.ContentType, record.Name);
+        }
+
+        private byte[] ResizeImage(byte[] bytes, int size)
+        {
+            Configuration.Default.AddImageFormat(new JpegFormat());
+
+            var options = new ImageSharp.Processing.ResizeOptions {
+                Mode = ImageSharp.Processing.ResizeMode.Max,
+                Size = new Size(size, size)
+            };
+
+            using(var stream = new MemoryStream())
+            using (var image = new Image(bytes))
+            {
+                image.Resize(options).Save(stream);
+                return stream.ToArray();
+            }
         }
         
         [HttpPost] // Authorize
