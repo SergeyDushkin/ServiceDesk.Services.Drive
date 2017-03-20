@@ -24,9 +24,9 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.2.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="5.0.0" />
     <PackageReference Include="ServiceDesk.Common" Version="1.0.*" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha2-00115" />
-    <PackageReference Include="ImageSharp.Formats.Jpeg" Version="1.0.0-alpha2-00115" />
-    <PackageReference Include="ImageSharp.Processing" Version="1.0.0-alpha2-00103" />
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha4-00031" />
+    <PackageReference Include="ImageSharp.Formats.Jpeg" Version="1.0.0-alpha2-00158" />
+    <PackageReference Include="ImageSharp.Processing" Version="1.0.0-alpha2-00146" />
   </ItemGroup>
   
   <ItemGroup>
